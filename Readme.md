@@ -29,21 +29,25 @@ ME4250-MECATRONICA/
 ├── 📂 2025-1/                      
 │   ├── 📂 Material Docente/        # Cátedras y Auxiliares
 │   ├── 📂 Multimedia/              # Registros audiovisuales
-│   ├── 📂 Repositorios/            # Proyectos Semestrales
-│   └── 📂 Utilidades/              # Recursos específicos del semestre
+│   └── 📂 Repositorios/            # Proyectos Semestrales
 │
 ├── 📂 2025-2/                      
 │   ├── 📂 Material Docente/        # Cátedras y Auxiliares
 │   ├── 📂 Multimedia/              # Registros audiovisuales
-│   ├── 📂 Repositorios/            # Proyectos Semestrales
-│   └── 📂 Utilidades/              # Recursos específicos del semestre
+│   └── 📂 Repositorios/            # Proyectos Semestrales
+│
+├── 📂 2026-1 (en progreso)/                      
+│   ├── 📂 Material Docente/        # Cátedras y Auxiliares
+│   ├── 📂 Multimedia/              # Registros audiovisuales
+│   └── 📂 Repositorios/            # Proyectos Semestrales
 │
 ├── 📂 Desafíos/
-│   ├── 📂 Desafío_1/        # Documentación del Desafío 1 de Mecatrónica 
-│   ├── 📂 Desafío_2/        # Documentación del Desafío 2 de Mecatrónica 
-│   └── 📂 Desafío_3/        # Documentación del Desafío 3 de Mecatrónica 
+│   ├── 📂 Desafío_1/               # Documentación del Desafío 1 de Mecatrónica 
+│   ├── 📂 Desafío_2/               # Documentación del Desafío 2 de Mecatrónica 
+│   └── 📂 Desafío_3/               # Documentación del Desafío 3 de Mecatrónica 
 │  
-└── 📄 README.md                
+├── 📂 Utilidades/                  # Recursos de utilidad para el curso
+└── 📄 README.md                    # README.md principal del curso  
 
 ```
 
@@ -52,6 +56,18 @@ ME4250-MECATRONICA/
 ## 🏛️ Historial Académico y Cuerpo Docente
 
 A continuación se detalla el equipo de ingeniería y docencia responsable de la ejecución del curso en cada periodo.
+
+### 📅 Semestre 2026-1 (Otoño) (En progreso)
+
+**Enfoque del Proyecto:** Robots Autobalancines (Péndulo Invertido)
+
+| Rol | Integrantes |
+| --- | --- |
+| **Profesor** | Harold Valenzuela |
+| **Auxiliar** | Fernando Navarrete |
+| **Ayudantes** | Valentina Abarca, Emilia Gutiérrez |
+| **Acceso Rápido** | [📄 Ir al README 2026-1](2026-1/README.md) |
+
 
 ### 📅 Semestre 2025-2 (Primavera)
 
