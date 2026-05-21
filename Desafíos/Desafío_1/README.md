@@ -1,29 +1,29 @@
-# 🏎️ Desafío 1: El Ratmóvil - Liga "Fast & Rats"
-## ME4250 - Mecatrónica | Semestre 2025-2
+# 🏎️ Desafío 1: El Ratmóvil - Liga "Fast & Rats 3era Edición"
+## ME4250 - Mecatrónica | Semestre 2026-1
 
 <p align="center">
-  <img src="Multimedia/Fotos/portada_ratmovil.jpg" alt="Portada Ratmóvil" width="100%">
+  <img src="Multimedia/Fotos/Portada_Fast_and_Rats_3era_ed.jpg" alt="Portada Ratmóvil" width="100%">
 </p>
 
 <table align="center">
   <tr>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/galeria_1.jpg" alt="Vista Frontal" width="100%">
-      <br><i>Ensamblaje del chasis y motores</i>
+      <img src="Multimedia/Fotos/RatMovil_vista_frontal.jpg" alt="Vista Frontal" width="80%">
+      <br><i>Vista Frontal RatMovil 3era edición</i>
     </td>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/galeria_2.jpg" alt="Vista Superior" width="100%">
-      <br><i>Distribución de la PCB y ESP32</i>
+      <img src="Multimedia/Fotos/RatMovil_vista_superior.jpg" alt="Vista Superior" width="100%">
+      <br><i>Vista Superior RatMovil 3era edición</i>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/galeria_3.jpg" alt="Detalle Electrónico" width="100%">
-      <br><i>Conexiones del driver TB6612FNG</i>
+      <img src="Multimedia/Fotos/RatMovil_vista_detalle.jpg" alt="Detalle Electrónico" width="70%">
+      <br><i>Vista Detalle RatMovil 3era edición</i>
     </td>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/galeria_4.jpg" alt="Prueba en Pista" width="100%">
-      <br><i>El Ratmóvil en la pista de pruebas</i>
+      <img src="Multimedia/Fotos/RatMovil_vista_detalle_2.jpg" alt="Prueba en Pista" width="100%">
+      <br><i>Cartel Fast and Rats MDF</i>
     </td>
   </tr>
 </table>
@@ -84,4 +84,4 @@ This project was made possible thanks to the support and facilities provided by 
 | <img src="./Multimedia/Logos/logo_fablab.png" width="150" alt="FabLab Logo"> | **FABLAB U. de Chile**<br>For their technical advisory and access to specialized machinery, specifically the Beambox Series Pro laser cutter.<br>*(Por su asesoría y el uso de máquinas especializadas, principalmente la cortadora láser Beambox Series Pro).* |
 
 ---
-*Open Source Project - ME4250 Mecatrónica - 2025*
+*Open Source Project - ME4250 Mecatrónica - 2026*
