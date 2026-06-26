@@ -9,7 +9,7 @@
   <tr>
     <td align="center" width="50%">
       <img src="Multimedia/Fotos/Ensamble_Correa_frontal.jpg" alt="Vista Frontal" width="80%">
-      <br><i>Vista Frontal del Sistema Clasificador V2</i>
+      <br><i>Vista Frontal</i>
     </td>
     <td align="center" width="50%">
       <img src="Multimedia/Fotos/Ensamble_Correa_superior.jpg" alt="Vista Superior" width="100%">
