@@ -2,28 +2,28 @@
 ## ME4250 - Mecatrónica | Semestre 2026-1
 
 <p align="center">
-  <img src="Multimedia/Fotos/Portada_Correa_Clasificadora_V2.jpg" alt="Portada Correa Clasificadora" width="100%">
+  <img src="Multimedia/Fotos/Ensamble_correa_iso.jpg" alt="Ensamble Correa Clasificadora" width="100%">
 </p>
 
 <table align="center">
   <tr>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/Correa_vista_frontal.jpg" alt="Vista Frontal" width="80%">
+      <img src="Multimedia/Fotos/Ensamble_Correa_frontal.jpg" alt="Vista Frontal" width="80%">
       <br><i>Vista Frontal del Sistema Clasificador V2</i>
     </td>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/Correa_vista_superior.jpg" alt="Vista Superior" width="100%">
-      <br><i>Vista Superior y Distribución de Canales (3D CAD)</i>
+      <img src="Multimedia/Fotos/Ensamble_Correa_superior.jpg" alt="Vista Superior" width="100%">
+      <br><i>Vista Superior</i>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/Correa_vista_detalle.jpg" alt="Detalle Electrónico" width="70%">
-      <br><i>Integración de PCB: Driver A4988, Mini360 y Arduino</i>
+      <img src="Multimedia/Fotos/PCB_y_cableado.jpg" alt="Detalle Electrónico" width="70%">
+      <br><i>Integración de PCB:</i>
     </td>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/Correa_operacion_pista.jpg" alt="Cámara de Lectura" width="100%">
-      <br><i>Módulo del Sensor de Color TCS3200 en Cámara Oscura</i>
+      <img src="Multimedia/Fotos/Manejo_cables.jpg" alt="Vista detallada posterior" width="100%">
+      <br><i>Manejo de Cables</i>
     </td>
   </tr>
 </table>
@@ -31,6 +31,11 @@
 Este repositorio contiene la documentación y los archivos fuente correspondientes al segundo desafío del curso. El objetivo principal es el codiseño, fabricación por corte láser/impresión 3D y la automatización de una **Correa Transportadora Clasificadora de Materiales por Color**, controlada mediante un microcontrolador Arduino.
 
 El sistema procesa objetos físicos dentro de una cámara de aislamiento lumínico utilizando un sensor óptico RGB, mapea las lecturas en tiempo real y acciona actuadores electromecánicos simétricos para derivar los elementos hacia tres bahías de descarga independientes.
+
+---
+### ⚠️ Este es un respaldo de la última versión (2026)
+
+**Idea y Desarrollo Original:** [Fernando Navarrete](https://github.com/FernandoN23/Conveyor-Belt-Arduino-DIY) (link al repositorio original con todas las versiones y cambios)
 
 ---
 
@@ -77,7 +82,8 @@ Para la construcción de este proyecto, se utilizaron los siguientes componentes
 
 Este desarrollo escolar se basa fuertemente en el ecosistema abierto del autor, rescatando aprendizajes de iteraciones pasadas y consolidando las mejoras mecánicas y electrónicas en esta nueva versión (V2).
 
-* **Autor del Proyecto & Desarrollo Original:** [Fernando Navarrete](https://github.com/FernandoN23/Conveyor-Belt-Arduino-DIY) *(Enlace al repositorio maestro para revisar el histórico y la evolución completa del diseño V1 a V2)*.
+* **Autor del Proyecto:** Fernando Navarrete.
+* **Colaboradores Docentes:** Harold Valenzuela, Valentina Abarca, Emilia Gutiérrez.
 
 ## 🎓 Acknowledgments / Agradecimientos
 
