@@ -1,4 +1,4 @@
-# Desafío 3 Mecatrónica 🤖⚖️
+# Desafío 3 Mecatrónica - Lógica y Programación 💻⚙️
 
 ¡Bienvenido al directorio de código! 🧠
 
