@@ -7,13 +7,13 @@ Bienvenidos al ecosistema de documentación técnica de los desafíos del curso 
 
 <p align="center">
   <a href="#-desafío-1-el-ratmóvil">
-    <img src="Desafío_1/Multimedia/Fotos/Portada_Fast_and_Rats_3era_ed.jpg" alt="Desafío 1" width="60%">
+    <img src="./Desafío_1/Multimedia/Fotos/Portada_Fast_and_Rats_3era_ed.jpg" alt="Desafío 1" width="60%">
   </a>
   <a href="#-desafío-2-rat-industries-v2">
-    <img src="Desafío_2/Multimedia/Fotos/Ensamble_correa_iso.jpg" alt="Desafío 2" width="60%">
+    <img src="./Desafío_2/Multimedia/Fotos/Ensamble_correa_iso.jpg" alt="Desafío 2" width="60%">
   </a>
   <a href="#-desafío-3-ratcraft-ball--beam">
-    <img src="Desafío_3/Multimedia/Fotos/Desafio_3_iso.jpg" alt="Desafío 3" width="60%">
+    <img src="./Desafío_3/Multimedia/Fotos/Desafio_3_iso.jpg" alt="Desafío 3" width="60%">
   </a>
 </p>
 

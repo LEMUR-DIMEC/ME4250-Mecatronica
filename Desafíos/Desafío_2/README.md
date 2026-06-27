@@ -2,27 +2,27 @@
 ## ME4250 - Mecatrónica | Semestre 2026-1
 
 <p align="center">
-  <img src="Multimedia/Fotos/Ensamble_correa_iso.jpg" alt="Ensamble Correa Clasificadora" width="100%">
+  <img src="./Multimedia/Fotos/Ensamble_correa_iso.jpg" alt="Ensamble Correa Clasificadora" width="100%">
 </p>
 
 <table align="center">
   <tr>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/Ensamble_Correa_frontal.jpg" alt="Vista Frontal" width="80%">
+      <img src="./Multimedia/Fotos/Ensamble_Correa_frontal.jpg" alt="Vista Frontal" width="80%">
       <br><i>Vista Frontal</i>
     </td>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/Ensamble_Correa_superior.jpg" alt="Vista Superior" width="100%">
+      <img src="./Multimedia/Fotos/Ensamble_Correa_superior.jpg" alt="Vista Superior" width="100%">
       <br><i>Vista Superior</i>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/PCB_y_cableado.jpg" alt="Detalle Electrónico" width="70%">
+      <img src="./Multimedia/Fotos/PCB_y_cableado.jpg" alt="Detalle Electrónico" width="70%">
       <br><i>Integración de PCB:</i>
     </td>
     <td align="center" width="50%">
-      <img src="Multimedia/Fotos/Manejo_cables.jpg" alt="Vista detallada posterior" width="100%">
+      <img src="./Multimedia/Fotos/Manejo_cables.jpg" alt="Vista detallada posterior" width="100%">
       <br><i>Manejo de Cables</i>
     </td>
   </tr>
