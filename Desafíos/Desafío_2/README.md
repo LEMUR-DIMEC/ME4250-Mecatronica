@@ -2,7 +2,7 @@
 ## ME4250 - Mecatrónica | Semestre 2026-1
 
 <p align="center">
-  <img src="./Multimedia/Fotos/Ensamble_correa_iso.jpg" alt="Ensamble Correa Clasificadora" width="100%">
+  <img src="./Multimedia/Fotos/Ensamble_Correa_iso.jpg" alt="Ensamble Correa Clasificadora" width="100%">
 </p>
 
 <table align="center">
