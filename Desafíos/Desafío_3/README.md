@@ -87,7 +87,7 @@ This project was made possible thanks to the academic support and specialized fa
 
 | Institution / Institución | Contribution / Contribución |
 | :---: | :--- |
-| <img src="./Multimedia/Logos/logo_lemur.png" width="120" alt="LEMUR Logo"> | **LEMUR (Laboratorio de Ingeniería Mecatrónica y Robótica)**<br>For providing the specialized engineering workspace, FDM 3D printers, and test instrumentation required for the belt validation.<br>*(Por proveer el espacio de ingeniería, impresoras 3D FDM e instrumentación de prueba necesaria para la validación de la correa).* |
+| <img src="./Multimedia/Logos/Logo_LEMUR.png" width="120" alt="LEMUR Logo"> | **LEMUR (Laboratorio de Ingeniería Mecatrónica y Robótica)**<br>For providing the specialized engineering workspace, FDM 3D printers, and test instrumentation required for the belt validation.<br>*(Por proveer el espacio de ingeniería, impresoras 3D FDM e instrumentación de prueba necesaria para la validación de la correa).* |
 | <img src="./Multimedia/Logos/logo_fablab.png" width="150" alt="FabLab Logo"> | **FABLAB U. de Chile**<br>For their technical manufacturing advisory and access to computer-controlled machinery, specifically the Beambox Series Pro laser cutter.<br>*(Por su asesoría técnica en manufactura y el uso de maquinaria CNC, principalmente la cortadora láser Beambox Series Pro).* |
 
 ---

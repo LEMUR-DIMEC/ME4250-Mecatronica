@@ -80,7 +80,7 @@ This project was made possible thanks to the support and facilities provided by 
 
 | Institution / Institución | Contribution / Contribución |
 | :---: | :--- |
-| <img src="./Multimedia/Logos/logo_lemur.png" width="120" alt="LEMUR Logo"> | **LEMUR (Laboratorio de Ingeniería Mecatrónica y Robótica)**<br>For providing the workspace, 3D printers, and tools required for the belt assembly.<br>*(Por proveer el espacio, impresoras 3D y herramientas necesarias para el ensamblado).* |
+| <img src="./Multimedia/Logos/Logo_LEMUR.png" width="120" alt="LEMUR Logo"> | **LEMUR (Laboratorio de Ingeniería Mecatrónica y Robótica)**<br>For providing the workspace, 3D printers, and tools required for the belt assembly.<br>*(Por proveer el espacio, impresoras 3D y herramientas necesarias para el ensamblado).* |
 | <img src="./Multimedia/Logos/logo_fablab.png" width="150" alt="FabLab Logo"> | **FABLAB U. de Chile**<br>For their technical advisory and access to specialized machinery, specifically the Beambox Series Pro laser cutter.<br>*(Por su asesoría y el uso de máquinas especializadas, principalmente la cortadora láser Beambox Series Pro).* |
 
 ---
