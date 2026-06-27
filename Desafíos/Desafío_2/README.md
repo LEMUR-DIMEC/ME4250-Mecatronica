@@ -8,11 +8,11 @@
 <table align="center">
   <tr>
     <td align="center" width="50%">
-      <img src="./Multimedia/Fotos/Ensamble_Correa_frontal.jpg" alt="Vista Frontal" width="80%">
+      <img src="./Multimedia/Fotos/Ensamble_Correa_Frontal.jpg" alt="Vista Frontal" width="80%">
       <br><i>Vista Frontal</i>
     </td>
     <td align="center" width="50%">
-      <img src="./Multimedia/Fotos/Ensamble_Correa_superior.jpg" alt="Vista Superior" width="100%">
+      <img src="./Multimedia/Fotos/Ensamble_Correa_Superior.jpg" alt="Vista Superior" width="100%">
       <br><i>Vista Superior</i>
     </td>
   </tr>
