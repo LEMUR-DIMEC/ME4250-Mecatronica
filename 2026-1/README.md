@@ -1,7 +1,7 @@
   # ME4250 - Mecatrónica
   ## Semestre 2026-1
 
-  Este documento detalla la estructura y organización de los contenidos correspondientes al semestre 2026-2 del curso ME4250 Mecatrónica. El repositorio centraliza el material docente, utilidades técnicas y el registro de los proyectos desarrollados.
+  Este documento detalla la estructura y organización de los contenidos correspondientes al semestre 2026-1 del curso ME4250 Mecatrónica. El repositorio centraliza el material docente, utilidades técnicas y el registro de los proyectos desarrollados.
 
   ## Galería de Proyectos (En desarrollo)
 
