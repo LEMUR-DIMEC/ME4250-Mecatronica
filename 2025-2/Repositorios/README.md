@@ -20,7 +20,7 @@ Cada carpeta de proyecto almacenada en este repositorio contiene, de manera esta
 ## Estructura de Directorios
 
 ```text
-📂 Repositories/
+📂 Repositorios/
 ├── Bienvenidos-al-Himalaya/
 ├── Camarera/
 ├── CURA-BoT/
