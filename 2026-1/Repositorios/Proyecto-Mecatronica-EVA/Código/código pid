@@ -1,0 +1,239 @@
+#include <Wire.h>
+
+// ==========================================
+// 1. CONFIGURACIÓN Y PINES
+// ==========================================
+
+const int MPU_ADDR = 0x68; 
+int16_t AcX, AcY, AcZ, GyX, GyY, GyZ;
+
+// Variables para Offsets (Calibración)
+long offset_AcX = 0;
+long offset_AcZ = 0;
+long offset_GyY = 0;
+
+// -- Módulo Driver de Motores (L298N) --
+const int IN1 = 8;
+const int IN2 = 7;
+const int ENA = 9; 
+const int IN3 = 5;
+const int IN4 = 4;
+const int ENB = 6; 
+
+// LIMITES DE VELOCIDAD DE LOS MOTORES
+const int MIN_PWM = 30;  // Fuerza mínima para vencer la fricción
+const int MAX_PWM = 220; // Límite máximo de velocidad
+
+// ==========================================
+// 2. VARIABLES DEL SISTEMA Y PID
+// ==========================================
+
+double Kp = 120;
+double Ki = 0;
+double Kd = 100;
+
+double setpoint = 0.0;   
+double input_angle = 0.0;
+double output_u = 0.0;   
+
+double error = 0.0;
+double prev_error = 0.0;
+double integral = 0.0;
+double derivative = 0.0;
+
+unsigned long prev_time = 0;
+double dt = 0.0;
+
+const double ANGULO_CORTE = 60.0; 
+
+// ==========================================
+// 3. SETUP PRINCIPAL
+// ==========================================
+void setup() {
+  Serial.begin(115200); 
+  Wire.begin();
+  
+  inicializarMOTORS(); 
+  inicializarSENSORS();
+  calibrarSENSORS(); // Leer el punto de inicio durante 3 segundos
+  
+  prev_time = millis();
+}
+
+// ==========================================
+// 4. LOOP PRINCIPAL
+// ==========================================
+void loop() {
+  unsigned long current_time = millis();
+  dt = (current_time - prev_time) / 1000.0; 
+
+  if (dt >= 0.005) {
+    leerSENSORS();
+    calcularPID();
+    controlarMOTORS();
+    imprimirPLOTTER();
+    
+    prev_time = current_time;
+  }
+}
+
+// ==========================================
+// 5. SENSOR Y CALIBRACIÓN
+// ==========================================
+void inicializarSENSORS() {
+  Wire.beginTransmission(MPU_ADDR);
+  Wire.write(0x6B); 
+  Wire.write(0);    
+  Wire.endTransmission(true);
+
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+}
+
+void calibrarSENSORS() {
+  Serial.println("Calibrando (3 seg)... MANTENER VERTICAL Y QUIETO");
+  long suma_AcX = 0, suma_AcZ = 0, suma_GyY = 0;
+  int contador = 0;
+  unsigned long tiempo_inicio = millis();
+  
+  while (millis() - tiempo_inicio < 3000) {
+    Wire.beginTransmission(MPU_ADDR);
+    Wire.write(0x3B);
+    Wire.endTransmission(false);
+    Wire.requestFrom(MPU_ADDR, 6, true);
+    
+    int16_t c_AcX = Wire.read() << 8 | Wire.read();
+    Wire.read(); Wire.read(); // Ignorar Y
+    int16_t c_AcZ = Wire.read() << 8 | Wire.read();
+    
+    Wire.beginTransmission(MPU_ADDR);
+    Wire.write(0x43);
+    Wire.endTransmission(false);
+    Wire.requestFrom(MPU_ADDR, 6, true);
+    
+    Wire.read(); Wire.read(); // Ignorar X
+    int16_t c_GyY = Wire.read() << 8 | Wire.read();
+    
+    suma_AcX += c_AcX;
+    suma_AcZ += c_AcZ;
+    suma_GyY += c_GyY;
+    contador++;
+    delay(2); 
+  }
+  
+  offset_AcX = suma_AcX / contador;
+  offset_GyY = suma_GyY / contador;
+  offset_AcZ = (suma_AcZ / contador) - 16384; 
+}
+
+void leerSENSORS() {
+  Wire.beginTransmission(MPU_ADDR);
+  Wire.write(0x3B);
+  Wire.endTransmission(false);
+  Wire.requestFrom(MPU_ADDR, 6, true);
+  
+  AcX = Wire.read() << 8 | Wire.read(); 
+  AcY = Wire.read() << 8 | Wire.read(); 
+  AcZ = Wire.read() << 8 | Wire.read(); 
+  
+  Wire.beginTransmission(MPU_ADDR);
+  Wire.write(0x43);
+  Wire.endTransmission(false);
+  Wire.requestFrom(MPU_ADDR, 6, true);
+
+  GyX = Wire.read() << 8 | Wire.read(); 
+  GyY = Wire.read() << 8 | Wire.read(); 
+  GyZ = Wire.read() << 8 | Wire.read(); 
+
+  // Aplicar offsets
+  AcX -= offset_AcX;
+  AcZ -= offset_AcZ;
+  GyY -= offset_GyY;
+
+  // Ángulo de cabeceo (Pitch)
+  double accel_angle = atan2(AcX, AcZ) * RAD_TO_DEG;
+  double gyro_rate = GyY / 131.0; 
+  
+  input_angle = 0.98 * (input_angle + gyro_rate * dt) + 0.02 * accel_angle;
+}
+
+// ==========================================
+// 6. CONTROL PID Y SEGURIDAD
+// ==========================================
+void calcularPID() {
+  if (abs(input_angle) > ANGULO_CORTE) {
+    output_u = 0;
+    integral = 0;     // Borra la memoria acumulada
+    prev_error = 0;   // Borra la predicción de movimiento
+    return;           // Sale de la función sin enviar potencia
+  }
+
+  error = setpoint - input_angle;
+  
+  integral += error * dt;
+
+  // Anti-windup para el estado de equilibrio
+  if (integral > 100) integral = 100;
+  if (integral < -100) integral = -100;
+  
+  derivative = (error - prev_error) / dt;
+  
+  output_u = (Kp * error) + (Ki * integral) + (Kd * derivative);
+  
+  prev_error = error;
+  
+  if (output_u > MAX_PWM) output_u = MAX_PWM;
+  if (output_u < -MAX_PWM) output_u = -MAX_PWM;
+}
+
+// ==========================================
+// 7. MOTORES
+// ==========================================
+void inicializarMOTORS() {
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  
+  analogWrite(ENA, 0);
+  analogWrite(ENB, 0);
+}
+
+void controlarMOTORS() {
+  if (output_u == 0) {
+    digitalWrite(IN1, LOW); digitalWrite(IN2, LOW); analogWrite(ENA, 0);
+    digitalWrite(IN3, LOW); digitalWrite(IN4, LOW); analogWrite(ENB, 0);
+    return;
+  }
+
+  int pwm_val = abs((int)output_u) + MIN_PWM;
+
+  if (pwm_val > MAX_PWM) pwm_val = MAX_PWM;
+
+  if (output_u > 0) {
+    digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW);
+    digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW);
+  } else {
+    digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH);
+    digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH);
+  }
+
+  analogWrite(ENA, pwm_val);
+  analogWrite(ENB, pwm_val);
+}
+
+// ==========================================
+// 8. TELEMETRÍA
+// ==========================================
+void imprimirPLOTTER() {
+  Serial.print("Angulo:");
+  Serial.print(input_angle);
+  Serial.print(",");
+  Serial.print("Setpoint:");
+  Serial.print(setpoint);
+  Serial.print(",");
+  Serial.print("u:");
+  Serial.println(output_u);
+}
