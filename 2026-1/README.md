@@ -75,7 +75,7 @@
 
   * Harold Valenzuela
 
-  **Auxiliares**
+  **Auxiliar**
 
   * Fernando Navarrete
 
