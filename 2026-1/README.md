@@ -8,60 +8,42 @@
   A continuación se presentan los robots autobalancines desarrollados durante el semestre. Haga clic en el nombre de cada proyecto para acceder a su documentación técnica, códigos y diagramas.
 
   *Nota: Para consultar la nómina detallada de los integrantes y los créditos correspondientes a cada grupo, por favor revise el **[Índice de Proyectos (Repositorios/README.md)](Repositorios/README.md)**.*
-
-  <table align="center">
-    <tr>
-      <td align="center" width="33%">
-        <img src="Multimedia/Fotos/Bienvenidos_al_Himalaya.jpg" alt="Bienvenidos al Himalaya" width="100%">
-        <br>
-        <a href="Repositorios/Bienvenidos-al-Himalaya"><b>Bienvenidos al Himalaya</b></a>
-      </td>
-      <td align="center" width="33%">
-        <img src="Multimedia/Fotos/Camarera.jpg" alt="Camarera" width="100%">
-        <br>
-        <a href="Repositorios/Camarera"><b>Camarera</b></a>
-      </td>
-      <td align="center" width="33%">
-        <img src="Multimedia/Fotos/CURA-BOT.jpg" alt="CURA-BoT" width="100%">
-        <br>
-        <a href="Repositorios/CURA-BoT"><b>CURA-BoT</b></a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <img src="Multimedia/Fotos/Guido.jpg" alt="Guido" width="100%">
-        <br>
-        <a href="Repositorios/Guido"><b>Guido</b></a>
-      </td>
-      <td align="center">
-        <img src="Multimedia/Fotos/Pato_Gallina.jpg" alt="La-Gallina" width="100%">
-        <br>
-        <a href="Repositorios/La-Gallina"><b>La-Gallina</b></a>
-      </td>
-      <td align="center">
-        <img src="Multimedia/Fotos/R2_F1P.jpg" alt="R2-F1P" width="100%">
-        <br>
-        <a href="Repositorios/R2-F1P"><b>R2-F1P</b></a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <img src="Multimedia/Fotos/Robot_Moto.jpg" alt="Robot-Motocicleta" width="100%">
-        <br>
-        <a href="Repositorios/Robot-Motocicleta"><b>Robot-Motocicleta</b></a>
-      </td>
-      <td align="center">
-        <img src="Multimedia/Fotos/Segway_Monkey.jpg" alt="Segway-Monkey" width="100%">
-        <br>
-        <a href="Repositorios/Segway-Monkey"><b>Segway Monkey</b></a>
-      </td>
-      <td align="center">
-        <img src="Multimedia/Fotos/WALL-E.jpg" alt="WALL-E" width="100%">
-        <br>
-        <a href="Repositorios/WALL-E"><b>WALL-E</b></a>
-      </td>
-    </tr>
-  </table>
+<table align="center" width="100%">
+  <tr>
+    <td align="center" colspan="2" width="33.3%">
+      <a href="Repositorios/Sir-Balance-III/README.md">
+        <img src="Multimedia/Fotos/Sir_Balance_III.jpg" alt="Sir Balance III" width="100%">
+        <br><b>Sir Balance III</b>
+      </a>
+    </td>
+    <td align="center" colspan="2" width="33.3%">
+      <a href="Repositorios/Equili-beat-/README.md">
+        <img src="Multimedia/Fotos/Equili-beat.jpg" alt="Equili-Beat" width="100%">
+        <br><b>Equili-Beat</b>
+      </a>
+    </td>
+    <td align="center" colspan="2" width="33.3%">
+      <a href="Repositorios/Jesus-Robot-Autobalancin-del-Futuro/README.md">
+        <img src="Multimedia/Fotos/Jesus.jpg" alt="Jesus" width="100%">
+        <br><b>Jesus Robot Autobalancín del Futuro</b>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="3" width="50%">
+      <a href="Repositorios/Proyecto-Mecatronica-EVA/README.md">
+        <img src="Multimedia/Fotos/Eva.jpg" alt="EVA" width="66%">
+        <br><b>EVA</b>
+      </a>
+    </td>
+    <td align="center" colspan="3" width="50%">
+      <a href="Repositorios/">
+        <img src="Multimedia/Fotos/Baymax.jpg" alt="Baymax" width="66%">
+        <br><b>Baymax</b>
+      </a>
+    </td>
+  </tr>
+</table>
 
   ## Estructura de Archivos
 
