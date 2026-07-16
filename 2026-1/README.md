@@ -45,7 +45,7 @@
   </tr>
 </table>
 
-  ## Estructura de Archivos
+  ## Estructura de Archivos (En desarrollo)
 
   A continuación se presenta el árbol de directorios para la navegación de los contenidos del semestre:
 
