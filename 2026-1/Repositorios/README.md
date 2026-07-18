@@ -21,11 +21,11 @@ Cada carpeta de proyecto almacenada en este repositorio contiene, de manera esta
 
 ```text
 📂 Repositorios/
+├── Baymax_Balanc-n
 ├── Equili-beat-
 ├── Jesus-Robot-Autobalancin-del-Futuro
 ├── Proyecto-Mecatronica-EVA
-├── Sir-Balance-III
-└── 
+└── Sir-Balance-III
 
 ```
 
