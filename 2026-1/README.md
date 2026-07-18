@@ -37,7 +37,7 @@
       </a>
     </td>
     <td align="center" colspan="3" width="50%">
-      <a href="Repositorios/">
+      <a href="Repositorios/Baymax_Balanc-n/README.md">
         <img src="Multimedia/Fotos/Baymax.jpg" alt="Baymax" width="66%">
         <br><b>Baymax</b>
       </a>
@@ -57,10 +57,12 @@
   │   └── Curso/                  # Documentación administrativa
   ├── 📂 Multimedia/                 # Imágenes y recursos visuales del curso
   ├── 📂 Repositorios/               # Carpetas de proyectos semestrales
-  │   ├── README.md               # Archivo índice con créditos de los grupos
-  │   ├── 
-  │   ├──
-  │   └── 
+  │   ├── Baymax_Balanc-n 
+  │   ├── Equili-beat-
+  │   ├── Jesus-Robot-Autobalancin-del-Futuro
+  │   ├── Proyecto-Mecatronica-EVA
+  │   ├── Sir-Balance III
+  │   └── README.md               # Archivo índice con créditos de los grupos
   └── 📂 Utilidades/                 # Recursos técnicos de apoyo
       ├── CAD Fusion360/          # Librerías y archivos de diseño
       └── Códigos/                # Scripts base y ejemplos de programación
