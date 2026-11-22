@@ -1,12 +1,10 @@
+
+
 // ==============================================================
 // Departamento de Ingeniería Mecánica - Universidad de Chile
 // Curso: ME4250 - Mecatrónica
 // Proyecto: Desafío 1: Motores (Liga Fast & Rats)
-// Equipo: [Nombre de tu equipo]
-// --------------------------------------------------------------
 // Archivo: src/main.cpp
-// Descripción: Firmware de control diferencial, telemetría y 
-//              servidor web asíncrono para el ESP32.
 // ==============================================================
 
 #include <Arduino.h>
@@ -31,7 +29,7 @@ const int PWMB = 21;
 const int STBY = 5;  
 
 // LEDs indicadores
-// Asumimos: 1(Atrás Izq), 2(Atrás Der), 3(Frente Izq), 4(Frente Der)
+// 1(Atrás Izq), 2(Atrás Der), 3(Frente Izq), 4(Frente Der)
 const int LED_1 = 26;
 const int LED_2 = 32;
 const int LED_3 = 33;
@@ -46,12 +44,12 @@ const int pwmChannelA = 0;
 const int pwmChannelB = 1;     
 
 int motorSpeed = 180;          
+bool wheelPivotMode = false; 
 
-// Variables para control no bloqueante de Intermitentes
 bool blinkLeft = false;
 bool blinkRight = false;
 unsigned long previousMillis = 0;
-const long blinkInterval = 400; // 400 milisegundos por parpadeo
+const long blinkInterval = 400; 
 bool blinkState = LOW;
 
 // ==============================================================================
@@ -71,13 +69,12 @@ const char* svg_fast_rats = R"rawliteral(<svg version="1.0" xmlns="http://www.w3
 const char* svg_lemur = R"rawliteral(<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="791.000000pt" height="982.000000pt" viewBox="0 0 791.000000 982.000000" preserveAspectRatio="xMidYMid meet"><g transform="translate(0.000000,982.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none"><path d="M855 9804 c-137 -30 -307 -109 -425 -199 -72 -55 -171 -156 -167 -169 2 -6 138 -89 303 -184 164 -95 318 -184 342 -198 l42 -25 0 396 c0 310 -3 395 -12 394 -7 0 -44 -7 -83 -15z"/><path d="M1240 9430 c0 -214 2 -390 5 -390 13 0 685 393 685 401 0 14 -118 126 -188 178 -120 90 -314 173 -459 195 l-43 6 0 -390z"/><path d="M79 9145 c-36 -82 -70 -235 -76 -347 l-6 -108 390 0 390 0 7 51 c4 28 6 52 4 54 -2 1 -628 362 -681 392 -4 2 -17 -16 -28 -42z"/><path d="M1740 8995 c-270 -157 -335 -198 -334 -215 0 -11 1 -36 2 -55 l2 -35 390 0 390 0 0 78 c-1 42 -7 113 -15 156 -17 96 -74 266 -89 265 -6 0 -162 -88 -346 -194z"/><path d="M1063 8835 c-41 -17 -67 -67 -60 -112 7 -43 23 -62 65 -80 67 -28 142 23 142 96 0 46 -23 79 -66 97 -40 17 -41 17 -81 -1z"/><path d="M0 8170 l0 -230 390 0 390 0 0 230 0 230 -390 0 -390 0 0 -230z"/><path d="M1410 8170 l0 -230 390 0 390 0 0 230 0 230 -390 0 -390 0 0 -230z"/><path d="M1406 7598 c-3 -29 -6 -133 -6 -230 l0 -178 390 0 390 0 0 93 c0 52 3 155 7 230 l6 137 -390 0 -390 0 -7 -52z"/><path d="M6911 7623 c-15 -16 -34 -38 -42 -51 -15 -21 -17 -22 -53 -7 -58 24 -196 55 -249 55 -87 0 -105 -14 -238 -192 -166 -221 -228 -295 -355 -418 -245 -238 -451 -355 -764 -436 -56 -15 -149 -18 -650 -24 l-585 -6 -90 -28 c-298 -91 -516 -314 -597 -611 -21 -77 -22 -105 -28 -730 -6 -553 -9 -660 -23 -720 -36 -150 -105 -236 -220 -274 -184 -61 -494 -45 -640 32 -92 48 -138 120 -173 267 -17 69 -18 166 -21 1248 l-4 1172 -390 0 -390 0 4 -1202 c4 -1297 4 -1293 59 -1518 87 -361 280 -557 640 -649 188 -48 341 -64 628 -64 345 -1 554 27 742 97 124 47 192 90 284 181 93 93 144 176 191 315 l33 95 0 -322 0 -323 385 0 385 0 0 486 0 487 138 -5 c157 -6 198 -20 248 -84 16 -21 157 -227 314 -458 l286 -421 452 -3 c248 -1 452 1 452 4 0 20 -267 427 -383 584 -154 209 -281 351 -381 428 -16 12 -27 24 -25 25 2 2 31 11 64 21 236 72 432 261 534 516 87 219 102 557 35 804 -118 436 -168 704 -181 966 -9 208 15 304 122 475 49 79 126 159 168 174 70 27 137 -5 209 -99 49 -65 147 -266 177 -364 27 -88 28 -200 1 -276 -10 -30 -17 -56 -16 -57 1 -2 31 13 67 32 78 43 178 75 230 75 56 0 113 -32 191 -108 79 -76 84 -73 75 46 -9 106 -30 182 -79 282 -48 99 -140 198 -230 249 l-57 32 -32 97 c-60 182 -69 201 -99 217 -45 23 -88 19 -119 -12z"/><path d="M6565 7157 c-20 -48 -62 -222 -74 -308 -17 -122 14 -191 94 -209 50 -11 101 -2 158 28 57 30 87 75 87 128 -1 81 -79 219 -190 337 l-59 62 -16 -38z"/><path d="M7060 6595 c-85 -38 -134 -117 -134 -215 0 -70 17 -114 63 -163 105 -114 304 -86 378 53 21 38 24 56 21 121 -4 89 -32 141 -100 186 -35 23 -54 28 -117 31 -52 1 -87 -3 -111 -13z"/><path d="M7394 6070 c-121 -90 -113 -88 -279 -70 -49 5 -100 7 -113 3 -48 -12 -63 -92 -24 -126 10 -8 129 -62 265 -121 l248 -107 124 41 c127 42 155 61 155 105 0 25 -164 313 -192 338 -38 33 -70 22 -184 -63z"/><path d="M4894 2606 c-3 -8 -4 -311 -1 -673 4 -555 7 -671 21 -740 52 -263 166 -375 441 -435 96 -20 470 -18 570 5 91 20 204 70 254 113 41 35 106 133 118 177 5 22 10 -17 13 -128 l5 -160 218 -3 217 -2 0 270 0 270 64 0 c75 0 105 -10 136 -42 11 -13 93 -130 182 -260 l160 -238 249 0 c137 0 249 2 249 5 0 3 -30 54 -67 113 -93 148 -235 335 -306 405 -32 32 -57 59 -55 61 1 1 21 8 43 15 107 37 204 129 260 246 46 98 59 163 58 290 -1 296 -129 471 -389 532 -57 13 -153 17 -544 20 -319 3 -495 1 -535 -6 -136 -25 -239 -104 -298 -229 l-32 -67 -6 -425 c-5 -372 -8 -431 -23 -472 -37 -100 -119 -134 -302 -126 -148 7 -205 39 -245 138 -11 28 -15 163 -19 695 l-5 660 -213 3 c-178 2 -213 0 -218 -12z m2300 -542 c62 -32 81 -79 81 -194 0 -77 -4 -101 -20 -129 -45 -76 -100 -91 -341 -91 l-164 0 0 221 0 220 203 -3 c181 -3 206 -5 241 -24z"/><path d="M170 1600 l0 -840 610 0 610 0 0 185 0 185 -395 0 -395 0 0 655 0 655 -215 0 -215 0 0 -840z"/><path d="M1572 1603 l3 -838 803 -3 803 -2 -3 678 -3 679 63 -236 c57 -216 223 -801 272 -964 l21 -67 232 2 232 3 102 355 c56 195 137 484 180 642 43 158 79 285 81 284 1 -2 -2 -54 -8 -117 -5 -63 -10 -372 -10 -686 l0 -573 200 0 200 0 0 840 0 840 -351 -2 -352 -3 -49 -185 c-106 -406 -186 -730 -204 -825 l-18 -100 -12 73 c-18 105 -209 858 -260 1025 -5 16 -60 17 -965 17 l-959 0 2 -837z m1206 0 l-3 -488 -387 -3 -388 -2 0 160 0 160 310 0 310 0 0 175 0 175 -310 0 -310 0 0 155 0 155 390 0 390 0 -2 -487z"/><path d="M617 413 c-4 -3 -7 -73 -7 -155 l0 -149 43 0 c23 0 60 0 81 -1 77 -3 122 93 81 171 -20 39 -66 57 -111 43 l-34 -10 0 54 c0 50 -2 54 -23 54 -13 0 -27 -3 -30 -7z m137 -149 c24 -24 20 -80 -6 -98 -29 -20 -34 -20 -58 4 -24 24 -26 67 -3 92 20 22 46 23 67 2z"/><path d="M2061 401 c-15 -27 9 -56 37 -47 39 13 24 66 -18 66 -5 0 -14 -8 -19 -19z"/><path d="M2700 364 c0 -50 -2 -55 -17 -49 -41 18 -78 16 -105 -4 -61 -49 -58 -153 5 -191 38 -24 53 -25 90 -6 15 8 27 11 27 5 0 -5 11 -9 25 -9 l25 0 0 155 0 155 -25 0 c-24 0 -25 -3 -25 -56z m-25 -98 c27 -19 24 -74 -4 -98 -29 -23 -36 -23 -61 2 -24 24 -26 57 -4 88 17 25 42 28 69 8z"/><path d="M4628 398 c-22 -13 -38 -30 -38 -40 0 -23 2 -22 50 2 26 13 40 27 40 40 0 25 -6 25 -52 -2z"/><path d="M5031 401 c-15 -27 9 -56 37 -47 39 13 24 66 -18 66 -5 0 -14 -8 -19 -19z"/><path d="M6587 413 c-4 -3 -7 -73 -7 -155 l0 -149 43 0 c23 0 60 0 81 -1 77 -3 122 93 81 171 -20 39 -66 57 -111 43 l-34 -10 0 54 c0 50 -2 54 -23 54 -13 0 -27 -3 -30 -7z m137 -149 c24 -24 20 -80 -6 -98 -29 -20 -34 -20 -58 4 -24 24 -26 67 -3 92 20 22 46 23 67 2z"/><path d="M6928 398 c-22 -13 -38 -30 -38 -40 0 -23 2 -22 50 2 26 13 40 27 40 40 0 25 -6 25 -52 -2z"/><path d="M7241 401 c-15 -27 9 -56 37 -47 39 13 24 66 -18 66 -5 0 -14 -8 -19 -19z"/><path d="M180 260 l0 -150 96 0 c93 0 95 1 92 23 -3 20 -9 22 -65 25 l-63 3 0 124 0 125 -30 0 -30 0 0 -150z"/><path d="M3160 261 l0 -151 30 0 29 0 3 83 3 82 35 -83 c31 -75 36 -83 59 -80 20 3 30 17 60 88 l36 85 3 -88 3 -87 29 0 30 0 0 150 0 150 -33 0 c-33 0 -34 -2 -77 -106 -25 -58 -47 -107 -50 -109 -4 -2 -27 44 -52 103 -44 100 -48 107 -77 110 l-31 3 0 -150z"/><path d="M6070 260 l0 -150 30 0 c30 0 30 1 30 55 0 50 2 55 23 55 16 0 29 -13 50 -51 30 -53 43 -63 76 -57 19 3 18 6 -14 58 l-34 55 24 20 c34 28 47 67 34 105 -16 44 -55 60 -144 60 l-75 0 0 -150z m158 88 c33 -33 -1 -78 -59 -78 l-39 0 0 45 0 45 43 0 c24 0 48 -5 55 -12z"/><path d="M1520 360 c0 -20 -5 -30 -15 -30 -9 0 -15 -9 -15 -25 0 -16 6 -25 15 -25 12 0 15 -14 15 -63 0 -79 17 -107 66 -107 30 0 34 3 34 26 0 14 -4 23 -9 19 -20 -12 -41 27 -41 76 0 46 2 49 25 49 20 0 25 5 25 25 0 20 -5 25 -25 25 -21 0 -25 5 -25 30 0 25 -4 30 -25 30 -21 0 -25 -5 -25 -30z"/><path d="M4240 360 c0 -20 -5 -30 -15 -30 -9 0 -15 -9 -15 -25 0 -16 6 -25 15 -25 12 0 15 -14 15 -63 0 -79 17 -107 66 -107 30 0 34 3 34 26 0 14 -4 23 -9 19 -20 -12 -41 27 -41 76 0 46 2 49 25 49 20 0 25 5 25 25 0 20 -5 25 -25 25 -21 0 -25 5 -25 30 0 25 -4 30 -25 30 -21 0 -25 -5 -25 -30z"/><path d="M7100 360 c0 -20 -5 -30 -15 -30 -9 0 -15 -9 -15 -25 0 -16 6 -25 15 -25 12 0 15 -14 15 -63 0 -79 17 -107 66 -107 30 0 34 3 34 26 0 14 -4 23 -9 19 -20 -12 -41 27 -41 76 0 46 2 49 25 49 20 0 25 5 25 25 0 20 -5 25 -25 25 -21 0 -25 5 -25 30 0 25 -4 30 -25 30 -21 0 -25 -5 -25 -30z"/><path d="M444 320 c-12 -5 -29 -19 -38 -32 -15 -21 -15 -23 5 -30 15 -6 28 -3 40 8 22 20 63 15 67 -8 3 -14 -3 -18 -27 -18 -70 0 -120 -45 -102 -92 11 -30 62 -51 94 -39 12 5 37 6 55 4 l32 -5 0 90 c0 86 -1 92 -26 111 -28 22 -64 26 -100 11z m76 -129 c0 -18 -33 -42 -53 -39 -29 4 -33 26 -5 37 30 13 58 13 58 2z"/><path d="M914 311 c-59 -36 -68 -124 -18 -175 34 -33 74 -41 117 -22 92 38 95 174 5 205 -44 16 -69 14 -104 -8z m100 -53 c22 -31 20 -64 -4 -88 -25 -25 -45 -25 -70 0 -37 37 -14 110 35 110 13 0 31 -10 39 -22z"/><path d="M1127 323 c-4 -3 -7 -53 -7 -110 l0 -103 30 0 29 0 3 73 c3 70 4 72 35 87 22 10 33 22 33 38 0 24 -19 29 -50 12 -13 -7 -21 -7 -25 0 -7 11 -38 13 -48 3z"/><path d="M1324 320 c-12 -5 -29 -19 -38 -32 -15 -21 -15 -23 5 -30 15 -6 28 -3 40 8 22 20 63 15 67 -8 3 -14 -3 -18 -27 -18 -70 0 -120 -45 -102 -92 11 -30 62 -51 94 -39 12 5 37 6 55 4 l32 -5 0 90 c0 86 -1 92 -26 111 -28 22 -64 26 -100 11z m76 -129 c0 -18 -33 -42 -53 -39 -29 4 -33 26 -5 37 30 13 58 13 58 2z"/><path d="M1694 311 c-59 -36 -68 -124 -18 -175 34 -33 74 -41 117 -22 92 38 95 174 5 205 -44 16 -69 14 -104 -8z m100 -53 c22 -31 20 -64 -4 -88 -25 -25 -45 -25 -70 0 -37 37 -14 110 35 110 13 0 31 -10 39 -22z"/><path d="M1907 323 c-4 -3 -7 -53 -7 -110 l0 -103 30 0 29 0 3 73 c3 70 4 72 35 87 22 10 33 22 33 38 0 24 -19 29 -50 12 -13 -7 -21 -7 -25 0 -7 11 -38 13 -48 3z"/><path d="M2067 324 c-4 -4 -7 -54 -7 -111 l0 -103 30 0 31 0 -3 108 c-3 99 -5 107 -23 110 -12 2 -24 0 -28 -4z"/><path d="M2214 311 c-59 -36 -68 -124 -18 -175 34 -33 74 -41 117 -22 92 38 95 174 5 205 -44 16 -69 14 -104 -8z m100 -53 c22 -31 20 -64 -4 -88 -25 -25 -45 -25 -70 0 -37 37 -14 110 35 110 13 0 31 -10 39 -22z"/><path d="M2844 311 c-107 -65 -25 -245 92 -201 31 12 64 38 64 50 0 16 -44 18 -67 3 -19 -13 -29 -14 -48 -5 -44 20 -28 32 44 32 78 0 86 7 70 65 -11 40 -57 75 -99 75 -14 0 -39 -9 -56 -19z m84 -43 c21 -21 13 -28 -35 -28 -45 0 -46 0 -28 20 20 23 45 26 63 8z"/><path d="M3574 311 c-107 -65 -25 -245 92 -201 31 12 64 38 64 50 0 16 -44 18 -67 3 -19 -13 -29 -14 -48 -5 -44 20 -28 32 44 32 78 0 86 7 70 65 -11 40 -57 75 -99 75 -14 0 -39 -9 -56 -19z m84 -43 c21 -21 13 -28 -35 -28 -45 0 -46 0 -28 20 20 23 45 26 63 8z"/><path d="M3813 311 c-71 -45 -66 -157 10 -194 24 -12 47 -16 66 -12 31 7 81 40 81 55 0 16 -43 18 -67 3 -51 -34 -103 30 -72 86 18 31 54 39 79 16 15 -14 22 -14 40 -5 l23 12 -25 25 c-34 34 -93 40 -135 14z"/><path d="M4054 320 c-12 -5 -29 -19 -38 -32 -15 -21 -15 -23 5 -30 15 -6 28 -3 40 8 22 20 63 15 67 -8 3 -14 -3 -18 -27 -18 -70 0 -120 -45 -102 -92 11 -30 62 -51 94 -39 12 5 37 6 55 4 l32 -5 0 90 c0 86 -1 92 -26 111 -28 22 -64 26 -100 11z m76 -129 c0 -18 -33 -42 -53 -39 -29 4 -33 26 -5 37 30 13 58 13 58 2z"/><path d="M4387 323 c-4 -3 -7 -53 -7 -110 l0 -103 30 0 29 0 3 73 c3 70 4 72 35 87 22 10 33 22 33 38 0 24 -19 29 -50 12 -13 -7 -21 -7 -25 0 -7 11 -38 13 -48 3z"/><path d="M4574 311 c-59 -36 -68 -124 -18 -175 34 -33 74 -41 117 -22 92 38 95 174 5 205 -44 16 -69 14 -104 -8z m100 -53 c22 -31 20 -64 -4 -88 -25 -25 -45 -25 -70 0 -37 37 -14 110 35 110 13 0 31 -10 39 -22z"/><path d="M4787 323 c-4 -3 -7 -53 -7 -110 l0 -103 30 0 29 0 3 76 c2 60 7 79 21 88 12 8 22 8 35 0 13 -9 18 -28 20 -88 l3 -76 31 0 31 0 -5 87 c-4 79 -7 88 -32 110 -29 25 -56 29 -86 13 -13 -7 -21 -7 -25 0 -7 11 -38 13 -48 3z"/><path d="M5037 324 c-4 -4 -7 -54 -7 -111 l0 -103 30 0 31 0 -3 108 c-3 99 -5 107 -23 110 -12 2 -24 0 -28 -4z"/><path d="M5173 311 c-71 -45 -66 -157 10 -194 24 -12 47 -16 66 -12 31 7 81 40 81 55 0 16 -43 18 -67 3 -51 -34 -103 30 -72 86 18 31 54 39 79 16 15 -14 22 -14 40 -5 l23 12 -25 25 c-34 34 -93 40 -135 14z"/><path d="M5424 320 c-12 -5 -29 -19 -38 -32 -15 -21 -15 -23 5 -30 15 -6 28 -3 40 8 22 20 63 15 67 -8 3 -14 -3 -18 -27 -18 -70 0 -120 -45 -102 -92 11 -30 62 -51 94 -39 12 5 37 6 55 4 l32 -5 0 90 c0 86 -1 92 -26 111 -28 22 -64 26 -100 11z m76 -129 c0 -18 -33 -42 -53 -39 -29 4 -33 26 -5 37 30 13 58 13 58 2z"/><path d="M5700 317 c0 -8 17 -57 39 -108 l39 -93 -19 -44 c-24 -55 -24 -54 8 -50 23 3 32 17 85 143 32 77 58 146 58 153 0 6 -11 12 -24 12 -21 0 -28 -10 -52 -76 l-28 -76 -26 73 c-24 64 -31 74 -54 77 -17 2 -26 -1 -26 -11z"/><path d="M6374 311 c-59 -36 -68 -124 -18 -175 34 -33 74 -41 117 -22 92 38 95 174 5 205 -44 16 -69 14 -104 -8z m100 -53 c22 -31 20 -64 -4 -88 -25 -25 -45 -25 -70 0 -37 37 -14 110 35 110 13 0 31 -10 39 -22z"/><path d="M6874 311 c-59 -36 -68 -124 -18 -175 34 -33 74 -41 117 -22 92 38 95 174 5 205 -44 16 -69 14 -104 -8z m100 -53 c22 -31 20 -64 -4 -88 -25 -25 -45 -25 -70 0 -37 37 -14 110 35 110 13 0 31 -10 39 -22z"/><path d="M7247 324 c-4 -4 -7 -54 -7 -111 l0 -103 30 0 31 0 -3 108 c-3 99 -5 107 -23 110 -12 2 -24 0 -28 -4z"/><path d="M7393 311 c-71 -45 -66 -157 10 -194 24 -12 47 -16 66 -12 31 7 81 40 81 55 0 16 -43 18 -67 3 -51 -34 -103 30 -72 86 18 31 54 39 79 16 15 -14 22 -14 40 -5 l23 12 -25 25 c-34 34 -93 40 -135 14z"/><path d="M7634 320 c-12 -5 -29 -19 -38 -32 -15 -21 -15 -23 5 -30 15 -6 28 -3 40 8 22 20 63 15 67 -8 3 -14 -3 -18 -27 -18 -70 0 -120 -45 -102 -92 11 -30 62 -51 94 -39 12 5 37 6 55 4 l32 -5 0 90 c0 86 -1 92 -26 111 -28 22 -64 26 -100 11z m76 -129 c0 -18 -33 -42 -53 -39 -29 4 -33 26 -5 37 30 13 58 13 58 2z"/></g></svg>)rawliteral";
 
 // ==============================================================================
-// 5. INTERFAZ GRÁFICA (HTML + CSS + JS) - ARQUITECTURA CHUNKED
+// 5. INTERFAZ GRÁFICA (HTML + CSS + JS)
 // ==============================================================================
 void handleRoot() {
   server.setContentLength(CONTENT_LENGTH_UNKNOWN);
   server.send(200, "text/html; charset=utf-8", ""); 
 
-  // Bloque 1: Estilos y Estructura Superior
   server.sendContent(R"rawliteral(
   <!DOCTYPE html>
   <html lang="es">
@@ -86,99 +83,264 @@ void handleRoot() {
   <meta charset="UTF-8">
   <title>Control Remoto Ratmóvil</title>
   <style>
+    * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
     body {
-      margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; 
-      align-items: center; justify-content: center; font-family: 'Segoe UI', Tahoma, sans-serif;
-      background-color: #0d0d0d; color: #ffffff; position: relative; overflow: hidden;
+      margin: 0; padding: 0; width: 100vw; height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #0d0d0d; color: #ffffff; overflow: hidden; position: relative;
     }
+
+    /* LOGOS DE FONDO */
+    .bg-watermark-container {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 2vw; z-index: 0; pointer-events: none;
+    }
+    .bg-logo {
+      width: 36vw; max-width: 240px; opacity: 0.32;
+    }
+    .bg-logo svg { width: 100%; height: auto; display: block; }
+    .bg-left path { fill: #ffffff !important; }
+    .bg-right path { fill: #b862ff !important; }
+
+    /* PANEL PRINCIPAL*/
     .panel {
-      background: #1a1a1a; padding: 25px 35px; border-radius: 15px; 
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.1); border: 1px solid #333; text-align: center;
-      z-index: 2;
+      background: rgba(22, 22, 22, 0.78); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      padding: 12px 16px; border-radius: 14px; 
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.12); border: 1px solid rgba(255, 255, 255, 0.1); 
+      text-align: center; z-index: 2; width: 92%; max-width: 380px;
+      display: flex; flex-direction: column; justify-content: space-between;
     }
-    .header-titles h2 { margin: 0; color: #00ff88; text-transform: uppercase; letter-spacing: 3px; }
-    .header-titles h4 { margin: 5px 0 15px 0; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: normal;}
-    .status { font-size: 13px; color: #aaa; margin-bottom: 20px; }
+
+    /* LOGOS FIJOS DENTRO DEL PANEL*/
+    .header-block { display: flex; flex-direction: column; }
+    .header-titles {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .header-titles h2 { margin: 0; color: #00ff88; text-transform: uppercase; letter-spacing: 2px; font-size: 17px; }
+    .header-titles h4 { display: none; }
+    .header-logo { height: 26px; width: auto; flex-shrink: 0; }
+    .header-logo svg { height: 100%; width: auto; display: block; }
+    .header-logo.logo-left path { fill: #ffffff !important; }
+    .header-logo.logo-right path { fill: #b862ff !important; }
+
+    .status { font-size: 11px; color: #aaa; margin: 3px 0 8px 0; }
     #ping { color: #00ff88; font-weight: bold; }
-    .grid { display: grid; grid-template-columns: repeat(3, 75px); gap: 12px; justify-content: center; margin-bottom: 20px; }
+
+    /* CONTROLES */
+    .controls-wrapper {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .grid-dpad {
+      display: grid; grid-template-columns: repeat(3, 62px); grid-template-rows: repeat(3, 50px);
+      gap: 6px; justify-content: center;
+    }
+    .grid-actions {
+      display: grid; grid-template-columns: repeat(2, 70px); gap: 8px; justify-content: center;
+    }
+
     button {
-      background-color: #262626; color: white; border: 2px solid #444;
-      padding: 18px 0; font-size: 24px; border-radius: 10px; cursor: pointer;
-      touch-action: manipulation; transition: all 0.1s ease; 
+      background-color: #242424; color: white; border: 2px solid #3d3d3d;
+      font-size: 20px; border-radius: 8px; cursor: pointer;
+      touch-action: manipulation; transition: transform 0.05s ease;
       display: flex; justify-content: center; align-items: center;
     }
     button:active, button.active { background-color: #00ff88; color: #000; border-color: #00ff88; transform: scale(0.92); }
-    .btn-stop { background-color: #3a1515; border-color: #ff4444; }
-    .btn-stop:active, .btn-stop.active { background-color: #ff4444; border-color: #ff4444; }
-    .btn-blink { background-color: #2a2010; border-color: #ffaa00; font-size: 16px; font-weight: bold; color: #ffaa00; }
-    .btn-blink:active, .btn-blink.active { background-color: #ffaa00; color: #000; border-color: #ffaa00; }
+    
+    .btn-stop { background-color: #381515; border-color: #ef4444; font-size: 22px; }
+    .btn-stop:active, .btn-stop.active { background-color: #ef4444; border-color: #ef4444; }
+    
+    .btn-blink { background-color: #2b2112; border-color: #f59e0b; font-size: 14px; font-weight: bold; color: #f59e0b; }
+    .btn-blink:active, .btn-blink.active { background-color: #f59e0b; color: #000; border-color: #f59e0b; }
+    
+    .btn-mode {
+      background-color: #172554; border-color: #2563eb;
+      color: #93c5fd; font-size: 11px; font-weight: bold;
+      border-radius: 6px; cursor: pointer; padding: 6px 0;
+    }
+    .btn-mode.active-mode {
+      background-color: #2563eb; color: #ffffff; border-color: #bfdbfe;
+    }
+    
     .empty { visibility: hidden; }
-    input[type=range] { width: 100%; cursor: pointer; accent-color: #00ff88; margin-top: 10px; }
     
-    /* ⚙️ Simetría de Logos en el Footer */
-    .footer-container { position: absolute; bottom: 15px; width: 95%; display: flex; justify-content: space-between; align-items: flex-end; z-index: 1; pointer-events: none; }
-    .logo-item { width: 160px; opacity: 0.8; }
-    .logo-item svg { width: 100%; height: auto; }
-    
-    /* Reglas de Color Vectorial */
-    .logo-left path { fill: #ffffff !important; } /* Fast & Rats en Blanco */
-    .logo-right path { fill: #6A0DAD !important; } /* LEMUR en Morado */
+    /* CONTROL PWM COMPACTO Y FIJO */
+    .speed-box { 
+      width: 100%; margin-top: 10px; padding: 6px 10px 2px 10px;
+      background: rgba(0, 0, 0, 0.4); border-radius: 8px;
+    }
+    .speed-box label { display: block; margin-bottom: 4px; font-size: 12px; }
+    input[type=range] { 
+      width: 100%; height: 10px; cursor: pointer; accent-color: #00ff88; 
+      background: #333; border-radius: 5px; outline: none; margin: 0;
+    }
+
+    /* ======================================================== */
+    /* 🔄 MODO HORIZONTAL (LANDSCAPE)                           */
+    /* ======================================================== */
+    @media (orientation: landscape) and (max-height: 550px) {
+      .bg-watermark-container { padding: 0 4vw; justify-content: space-between; }
+      .bg-logo { width: 22vw; max-width: 160px; opacity: 0.35; }
+
+      .panel {
+        max-width: 96vw; width: 96vw; height: 96vh; padding: 6px 16px;
+        justify-content: space-between;
+      }
+
+      /* Orden vertical del panel en horizontal: encabezado -> PWM -> controles.*/
+      .header-block { order: 1; }
+      .speed-box { order: 2; }
+      .controls-wrapper { order: 3; flex-grow: 1; }
+
+      .header-titles h2 { font-size: 14px; display: inline-block; margin-right: 8px; }
+      .header-logo { height: 18px; }
+      .status { margin-bottom: 0; font-size: 10px; display: inline-block; }
+      
+      .controls-wrapper {
+        flex-direction: row; justify-content: space-between; align-items: center;
+        width: 100%; padding: 0 10px;
+      }
+
+      /* Cruceta a la IZQUIERDA */
+      .grid-dpad {
+        grid-template-columns: repeat(3, 50px);
+        max-width: 165px;
+        grid-template-rows: repeat(3, 40px);
+        gap: 5px;
+        margin-left: 35px;
+      }
+
+      /* Acciones a la DERECHA */
+      .grid-actions {
+        display: grid;
+        grid-template-columns: 80px 80px;
+        grid-template-rows: 30px 38px 40px;
+        gap: 5px;
+        margin-right: 15px;
+      }
+      #btn-pivot { grid-column: span 2; }
+      #btn-stop { grid-column: span 2; }
+
+      /* Control PWM */
+      .speed-box {
+        margin-top: 4px; padding: 4px 12%;
+      }
+      input[type=range] { height: 14px; }
+    }
   </style>
   </head>
   <body>
-  <div class="panel">
-    <div class="header-titles">
-      <h2>Fast & Rats</h2>
-      <h4>Desafío 1 Mecatrónica</h4>
-    </div>
-    <div class="status">Telemetría: <span id="ping">En línea</span> | Freno: Espacio</div>
-    <div class="grid">
-      <button id="btn-blinkL" class="btn-blink" onmousedown="send('blinkLeft')" ontouchstart="send('blinkLeft')">Q ⇦</button>
-      <button id="btn-forward" onmousedown="send('backward')" onmouseup="send('stop')" ontouchstart="send('backward')" ontouchend="send('stop')">🡡</button>
-      <button id="btn-blinkR" class="btn-blink" onmousedown="send('blinkRight')" ontouchstart="send('blinkRight')">⇨ E</button>
-      <button id="btn-left" onmousedown="send('right')" onmouseup="send('stop')" ontouchstart="send('right')" ontouchend="send('stop')">🡠</button>
-      <button id="btn-stop" class="btn-stop" onmousedown="send('brake')" onmouseup="send('stop')" ontouchstart="send('brake')" ontouchend="send('stop')">⏹</button>
-      <button id="btn-right" onmousedown="send('left')" onmouseup="send('stop')" ontouchstart="send('left')" ontouchend="send('stop')">🡢</button>
-      <div class="empty"></div>
-      <button id="btn-backward" onmousedown="send('forward')" onmouseup="send('stop')" ontouchstart="send('forward')" ontouchend="send('stop')">🡣</button>
-      <div class="empty"></div>
-    </div>
-    <label style="font-size: 14px; color: #ccc;">Potencia PWM: <span id="v" style="color:white; font-weight:bold;">180</span></label>
-    <input id="spd" type="range" min="0" max="255" value="180" oninput="chgSpeed(this.value)">
-  </div>
 
-  <div class="footer-container">
-    <div class="logo-item logo-left">
+  <!-- CAPA DE FONDO: LOGOS (decorativo) -->
+  <div class="bg-watermark-container">
+    <div class="bg-logo bg-left">
 )rawliteral");
 
-  // Inyección Logo Fast & Rats
   server.sendContent(svg_fast_rats);
 
   server.sendContent(R"rawliteral(
     </div>
-    <div class="logo-item logo-right">
+    <div class="bg-logo bg-right">
 )rawliteral");
 
-  // Inyección Logo LEMUR
   server.sendContent(svg_lemur);
 
-  // Bloque Final: Scripts de Control
   server.sendContent(R"rawliteral(
     </div>
   </div>
+
+  <!-- PANEL DE CONTROL CON PWM INTEGRADO -->
+  <div class="panel">
+    <div class="header-block">
+      <div class="header-titles">
+        <div class="header-logo logo-left">
+)rawliteral");
+
+  server.sendContent(svg_fast_rats);
+
+  server.sendContent(R"rawliteral(
+        </div>
+        <h2>Fast & Rats</h2>
+        <div class="header-logo logo-right">
+)rawliteral");
+
+  server.sendContent(svg_lemur);
+
+  server.sendContent(R"rawliteral(
+        </div>
+      </div>
+      <div class="status">Telemetría: <span id="ping">En línea</span> | Freno: Espacio</div>
+    </div>
+
+    <!-- CONTROL PWM -->
+    <div class="speed-box">
+      <label style="color: #ccc;">Potencia PWM: <span id="v" style="color:#00ff88; font-weight:bold;">180</span></label>
+      <input id="spd" type="range" min="0" max="255" value="180" oninput="chgSpeed(this.value)">
+    </div>
+
+    <div class="controls-wrapper">
+      
+      <!-- Cruceta de Dirección -->
+      <div class="grid-dpad">
+        <div class="empty"></div>
+        <button id="btn-forward" onmousedown="send('backward')" onmouseup="send('stop')" ontouchstart="send('backward')" ontouchend="send('stop')">🡡</button>
+        <div class="empty"></div>
+
+        <button id="btn-left" onmousedown="send('right')" onmouseup="send('stop')" ontouchstart="send('right')" ontouchend="send('stop')">🡠</button>
+        <div class="empty"></div>
+        <button id="btn-right" onmousedown="send('left')" onmouseup="send('stop')" ontouchstart="send('left')" ontouchend="send('stop')">🡢</button>
+
+        <div class="empty"></div>
+        <button id="btn-backward" onmousedown="send('forward')" onmouseup="send('stop')" ontouchstart="send('forward')" ontouchend="send('stop')">🡣</button>
+        <div class="empty"></div>
+      </div>
+
+      <!-- Acciones: Selector de Giro, Intermitentes Q/E y Freno -->
+      <div class="grid-actions">
+        <button id="btn-pivot" class="btn-mode" onclick="togglePivotMode()">Giro: Centro</button>
+        <button id="btn-blinkL" class="btn-blink" onmousedown="send('blinkLeft')" ontouchstart="send('blinkLeft')">Q ⇦</button>
+        <button id="btn-blinkR" class="btn-blink" onmousedown="send('blinkRight')" ontouchstart="send('blinkRight')">⇨ E</button>
+        <button id="btn-stop" class="btn-stop" onmousedown="send('brake')" onmouseup="send('stop')" ontouchstart="send('brake')" ontouchend="send('stop')">⏹</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bloque 3: Scripts de Control -->
   <script>
     let lastCmd = "";
+    let pivotActive = false;
     const v = document.getElementById('v');
     const ping = document.getElementById('ping');
+
     function send(cmd) {
       if (cmd === lastCmd && cmd !== 'stop') return; 
       lastCmd = cmd;
       fetch('/' + cmd).then(r => ping.style.color = "#00ff88").catch(e => ping.style.color = "red");
     }
-    function chgSpeed(val) { v.textContent = val; fetch('/speed?val=' + val); }
+
+    function chgSpeed(val) { 
+      v.textContent = val; 
+      fetch('/speed?val=' + val); 
+    }
+
+    function togglePivotMode() {
+      fetch('/togglePivot').then(r => r.text()).then(mode => {
+        pivotActive = (mode === "WHEEL");
+        const b = document.getElementById('btn-pivot');
+        b.textContent = pivotActive ? "Giro: Rueda" : "Giro: Centro";
+        b.classList.toggle('active-mode', pivotActive);
+      });
+    }
+
     const moveMap = { 'w':'backward', 'a':'right', 's':'forward', 'd':'left', ' ':'brake' };
     const toggleMap = { 'q':'blinkLeft', 'e':'blinkRight' };
-    const btnMap = { 'w':'btn-forward', 'a':'btn-left', 's':'btn-backward', 'd':'btn-right', ' ':'btn-stop', 'q':'btn-blinkL', 'e':'btn-blinkR' };
+    const btnMap = { 
+      'w':'btn-forward', 'a':'btn-left', 's':'btn-backward', 'd':'btn-right', 
+      ' ':'btn-stop', 'q':'btn-blinkL', 'e':'btn-blinkR' 
+    };
+
     const pressed = new Set();
     window.addEventListener('keydown', (e) => {
       let key = e.key.toLowerCase();
@@ -186,20 +348,21 @@ void handleRoot() {
       pressed.add(key);
       if (moveMap[key]) {
         send(moveMap[key]);
-        if(btnMap[key]) document.getElementById(btnMap[key]).classList.add('active');
+        if (btnMap[key]) document.getElementById(btnMap[key]).classList.add('active');
       } else if (toggleMap[key]) {
         send(toggleMap[key]);
-        if(btnMap[key]) document.getElementById(btnMap[key]).classList.add('active');
+        if (btnMap[key]) document.getElementById(btnMap[key]).classList.add('active');
       }
     });
+
     window.addEventListener('keyup', (e) => {
       let key = e.key.toLowerCase();
       pressed.delete(key);
       if (moveMap[key]) {
         send('stop');
-        if(btnMap[key]) document.getElementById(btnMap[key]).classList.remove('active');
+        if (btnMap[key]) document.getElementById(btnMap[key]).classList.remove('active');
       } else if (toggleMap[key]) {
-        if(btnMap[key]) document.getElementById(btnMap[key]).classList.remove('active');
+        if (btnMap[key]) document.getElementById(btnMap[key]).classList.remove('active');
       }
     });
   </script>
@@ -209,8 +372,9 @@ void handleRoot() {
   server.sendContent("");
 }
 
+
 // ==============================================================================
-// 6. LÓGICA DE CONTROL DE HARDWARE (Motores y LEDs)
+// 6. LÓGICA DE CONTROL DE HARDWARE
 // ==============================================================================
 
 void ledsOff() {
@@ -252,6 +416,7 @@ void motorsBackward() {
   ledsOff(); 
 }
 
+// Giros sobre el centro geométrico
 void motorsLeft() {
   digitalWrite(AIN1, LOW); digitalWrite(AIN2, HIGH); 
   digitalWrite(BIN1, HIGH); digitalWrite(BIN2, LOW);
@@ -264,6 +429,25 @@ void motorsRight() {
   digitalWrite(BIN1, LOW); digitalWrite(BIN2, HIGH);
   ledcWrite(pwmChannelA, motorSpeed); ledcWrite(pwmChannelB, motorSpeed); 
   ledsOff(); 
+}
+
+// Giros pivotantes sobre una sola rueda
+void motorsPivotLeft() {
+  digitalWrite(AIN1, LOW); digitalWrite(AIN2, LOW);
+  ledcWrite(pwmChannelA, 0); 
+
+  digitalWrite(BIN1, HIGH); digitalWrite(BIN2, LOW);
+  ledcWrite(pwmChannelB, motorSpeed); 
+  ledsOff();
+}
+
+void motorsPivotRight() {
+  digitalWrite(AIN1, HIGH); digitalWrite(AIN2, LOW);
+  ledcWrite(pwmChannelA, motorSpeed); 
+
+  digitalWrite(BIN1, LOW); digitalWrite(BIN2, LOW);
+  ledcWrite(pwmChannelB, 0); 
+  ledsOff();
 }
 
 // ==============================================================================
@@ -287,31 +471,51 @@ void setup() {
 
   Serial.println("\n--- Iniciando Sistema Ratmóvil ---");
   WiFi.softAP(ssid, password);
+  WiFi.setSleep(false);
   IPAddress IP = WiFi.softAPIP();
   
   Serial.print("✅ Red WiFi Creada: "); Serial.println(ssid);
   Serial.print("✅ IP del Panel de Control: "); Serial.println(IP); 
 
   server.on("/", handleRoot);
-  server.on("/forward", [](){ motorsForward(); server.send(200,"text/plain","OK"); });
-  server.on("/backward", [](){ motorsBackward(); server.send(200,"text/plain","OK"); });
-  server.on("/left", [](){ motorsLeft(); server.send(200,"text/plain","OK"); });
-  server.on("/right", [](){ motorsRight(); server.send(200,"text/plain","OK"); });
-  server.on("/stop", [](){ motorsStop(); server.send(200,"text/plain","OK"); });
-  server.on("/brake", [](){ motorsBrake(); server.send(200,"text/plain","OK"); });
+  server.on("/forward", [](){ motorsForward(); server.send(200, "text/plain", "OK"); });
+  server.on("/backward", [](){ motorsBackward(); server.send(200, "text/plain", "OK"); });
   
+  // A y D alternan automáticamente según el modo seleccionado
+  server.on("/left", [](){ 
+    if (wheelPivotMode) motorsPivotLeft(); 
+    else motorsLeft(); 
+    server.send(200, "text/plain", "OK"); 
+  });
+  
+  server.on("/right", [](){ 
+    if (wheelPivotMode) motorsPivotRight(); 
+    else motorsRight(); 
+    server.send(200, "text/plain", "OK"); 
+  });
+  
+  server.on("/stop", [](){ motorsStop(); server.send(200, "text/plain", "OK"); });
+  server.on("/brake", [](){ motorsBrake(); server.send(200, "text/plain", "OK"); });
+
+  // Conmutador del modo de giro (Centro / Rueda)
+  server.on("/togglePivot", [](){
+    wheelPivotMode = !wheelPivotMode;
+    server.send(200, "text/plain", wheelPivotMode ? "WHEEL" : "CENTER");
+  });
+  
+  // Intermitentes idénticos al código original (Toggle por flanco)
   server.on("/blinkLeft", [](){ 
     blinkLeft = !blinkLeft; 
     blinkRight = false; 
-    if(!blinkLeft) ledsOff(); 
-    server.send(200,"text/plain","OK"); 
+    if (!blinkLeft) ledsOff(); 
+    server.send(200, "text/plain", "OK"); 
   });
   
   server.on("/blinkRight", [](){ 
     blinkRight = !blinkRight; 
     blinkLeft = false; 
-    if(!blinkRight) ledsOff(); 
-    server.send(200,"text/plain","OK"); 
+    if (!blinkRight) ledsOff(); 
+    server.send(200, "text/plain", "OK"); 
   });
 
   server.on("/speed", [](){
@@ -325,7 +529,7 @@ void setup() {
 }
 
 // ==============================================================================
-// 8. LOOP: MÁQUINA DE ESTADOS
+// 8. LOOP: MÁQUINA DE ESTADOS 
 // ==============================================================================
 void loop() {
   server.handleClient();
